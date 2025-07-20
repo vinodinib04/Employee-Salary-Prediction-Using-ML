@@ -12,7 +12,7 @@ A sophisticated web application built with Streamlit that predicts employee sala
 ### **Live Application:** [**🚀 View the Deployed App Here!**](https://employe-salary-prediction-using-ml-4xk5frvaqtl3fuvwn5w5cu.streamlit.app/)
 
 <!-- Add a screenshot of your beautiful app! -->
-![AI Salary Oracle Screenshot]([LINK_TO_YOUR_SCREENSHOT_HERE])
+![AI Salary Oracle Screenshot](https://github.com/Ayush03A/Employe-Salary-Prediction-Using-ML/blob/5e98565e81625cc63ca5c2e816d74e0e844d259a/Screenshots/Website.png)
 
 ---
 
