@@ -22,82 +22,95 @@ st.set_page_config(
 # ======================================================================================
 # 3. CUSTOM STYLING (Neon + Glassmorphism)
 # ======================================================================================
+# ======================================================================================
+# 3. CUSTOM CSS (Light Professional Theme)
+# ======================================================================================
 st.markdown("""
 <style>
-    /* Background & base color theme */
+    /* Global page background and font */
     .stApp {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        color: #e0e7ff;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    /* Glassmorphism card */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 1rem;
-        padding: 2rem;
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
+        background-color: #f8f9fa;
+        color: #212529;
+        font-family: 'Segoe UI', sans-serif;
     }
 
     /* Headings */
     .header-text {
-        font-size: 3rem;
-        font-weight: 700;
         text-align: center;
-        background: linear-gradient(90deg, #818cf8, #c084fc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 0.3rem;
     }
 
     .subheader-text {
         text-align: center;
-        color: #c7d2fe;
-        font-size: 1.1rem;
+        color: #495057;
+        font-size: 1rem;
         margin-bottom: 2rem;
     }
 
-    /* Input fields */
-    input, select, textarea {
-        background-color: rgba(255,255,255,0.1) !important;
-        color: #e0e7ff !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 0.5rem !important;
+    /* Input form container */
+    .form-container {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+        border: 1px solid #dee2e6;
     }
 
-    /* Button */
+    /* Input boxes */
+    input, select, textarea {
+        background-color: #ffffff !important;
+        color: #212529 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 0.4rem !important;
+    }
+
+    /* Button style */
     .stButton>button {
-        background-image: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background-color: #0d6efd;
         color: white;
         border: none;
+        border-radius: 0.4rem;
+        padding: 0.6rem 1.4rem;
+        font-size: 1rem;
         font-weight: 600;
-        border-radius: 0.6rem;
-        padding: 0.7rem 1.2rem;
-        transition: all 0.3s ease;
+        transition: background 0.2s ease;
     }
     .stButton>button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px #818cf8;
+        background-color: #0b5ed7;
     }
 
     /* Metrics */
-    .stMetric > label { color: #a5b4fc; }
-    .stMetric > div > span { color: #c084fc; font-size: 2rem; font-weight: 700; }
-
-    /* Expander */
-    .stExpander {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 0.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .stMetric > label {
+        color: #495057;
+        font-weight: 600;
+    }
+    .stMetric > div > span {
+        color: #0d6efd;
+        font-size: 2rem;
+        font-weight: 700;
     }
 
-    /* Footer */
+    /* Expander & footer */
+    .stExpander {
+        background: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+    }
+
     .footer {
         text-align: center;
-        padding: 2rem;
-        color: #94a3b8;
+        padding: 1.5rem;
+        color: #6c757d;
         font-size: 0.9rem;
+    }
+
+    .footer a {
+        color: #0d6efd;
+        text-decoration: none;
+        font-weight: 500;
     }
 </style>
 """, unsafe_allow_html=True)
