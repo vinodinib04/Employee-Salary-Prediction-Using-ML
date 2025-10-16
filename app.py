@@ -32,15 +32,56 @@ st.markdown("""
     .stApp {
         background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
         background-color: #0c111c;
+        color: #e0e7ff !important;
     }
-    .main .block-container { padding: 2rem 3rem; }
-    .header-text { font-family: 'Garamond', serif; color: #e0e7ff; font-weight: 700; font-size: 3rem; text-align: center; }
-    .subheader-text { color: #a5b4fc; font-size: 1.1rem; text-align: center; margin-bottom: 2.5rem; }
-    .form-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(255, 255, 255, 0.1); }
-    .stButton>button { background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.8rem 1.6rem; border-radius: 0.75rem; font-weight: bold; font-size: 1.1rem; border: none; }
-    .stMetric { background-color: transparent; border-radius: 1rem; padding: 1rem; text-align: center; }
+
+    /* General text and label colors */
+    html, body, [class*="st-"], label, span, div, p {
+        color: #e0e7ff !important;
+    }
+
+    /* Input boxes (number_input, selectbox, etc.) */
+    input, select, textarea {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: #e0e7ff !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 0.5rem !important;
+    }
+
+    /* Dropdown text visibility */
+    .stSelectbox div, .stTextInput div, .stNumberInput div {
+        color: #e0e7ff !important;
+    }
+
+    /* Button styling */
+    .stButton>button {
+        background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.8rem 1.6rem;
+        border-radius: 0.75rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border: none;
+    }
+
+    /* Metric text */
     .stMetric > label { font-weight: 600; color: #c7d2fe; }
     .stMetric > div > span { font-size: 2.5rem; color: #818cf8; font-weight: 700; }
+
+    /* Headers */
+    .header-text { font-family: 'Garamond', serif; color: #e0e7ff; font-weight: 700; font-size: 3rem; text-align: center; }
+    .subheader-text { color: #a5b4fc; font-size: 1.1rem; text-align: center; margin-bottom: 2.5rem; }
+
+    /* Containers */
+    .form-container { 
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Expander & footer */
     .stExpander { background: rgba(255, 255, 255, 0.05); border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.1); }
     .footer { text-align: center; padding: 2rem; color: #9ca3af; }
     .footer a { color: #818cf8; text-decoration: none; font-weight: 600; margin: 0 0.5rem; }
@@ -116,7 +157,7 @@ with col1:
         job_title = st.selectbox("Job Title", options=label_encoders["Job Title"].classes_, index=5)
         
         # The submit button for the form
-        submit_button = st.form_submit_button("✨ Divine the Salary")
+        submit_button = st.form_submit_button("Predict the Salary")
         
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -124,8 +165,7 @@ with col1:
 with col2:
     # If no prediction has been made yet, show the animation
     if not st.session_state.prediction_made:
-        st_lottie(lottie_json, speed=1, height=300, key="initial_animation")
-        st.info("Your prediction will appear here once submitted.", icon="💡")
+        
     # If a prediction has been made, show the result
     else:
         st.markdown('<div class="form-container">', unsafe_allow_html=True)
@@ -134,11 +174,11 @@ with col2:
         
         st.metric(
             label="Estimated Annual Salary Range", 
-            value=f"${salary * 0.925:,.0f} - ${salary * 1.075:,.0f}",
+            value=f"${salary * 0.925:,.0f} - ₹{salary * 1.075:,.0f}",
             delta="Based on your inputs",
             delta_color="off"
         )
-        st.success("The vision is clear! Prediction successful.", icon="✅")
+        st.success("Prediction successful.", icon="✅")
         st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -169,7 +209,7 @@ if submit_button:
     st.session_state.prediction_made = True
     
     # Fun animation and a page rerun to update the UI
-    st.balloons()
+
     st.rerun()
 
 
@@ -177,16 +217,11 @@ if submit_button:
 # 8. FOOTER AND ADDITIONAL INFORMATION
 # ======================================================================================
 st.markdown("---")
-with st.expander(" peek behind the curtain at the model's performance..."):
+with st.expander(" model's performance..."):
     st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
     st.info("This plot shows the relationship between the model's predicted salaries and the actual salaries from the test dataset. A strong positive correlation indicates high accuracy.")
 
 st.markdown("---")
 st.markdown("""
-<div class="footer">
-    <p>Crafted with 🧠 & ❤️ by <b>Ayush Anand</b></p>
-    <a href="https://github.com/Ayush03A" target="_blank">GitHub</a> | 
-    <a href="https://www.linkedin.com/in/3ayushanand/" target="_blank">LinkedIn</a>
-</div>
-""", unsafe_allow_html=True)
+
 
