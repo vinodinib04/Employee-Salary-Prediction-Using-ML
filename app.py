@@ -104,7 +104,7 @@ st.markdown('<p class="subheader-text">Predict an employee\'s annual salary usin
 # ======================================================================================
 st.markdown('<div class="form-container">', unsafe_allow_html=True)
 with st.form("salary_form"):
-    st.subheader("Employee Details")
+    st.header("Employee Details")
 
     age = st.number_input("Age", min_value=18, max_value=80, value=30)
     gender = st.selectbox("Gender", options=label_encoders["Gender"].classes_)
@@ -135,15 +135,12 @@ if submitted:
     input_scaled = scaler.transform(input_df)
     predicted_salary = model.predict(input_scaled)[0]
 
-    st.success(f"✅ **Predicted Annual Salary:** ₹{predicted_salary:,.0f}", icon="💰")
+    st.success(f"✅ **Predicted Annual Salary:** ₹{predicted_salary*12:,.0f}")
 
     st.markdown("---")
     st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
 
-# ======================================================================================
-# 8. FOOTER
-# ======================================================================================
-st.markdown('<div class="footer">Developed as part of an AI & ML Project</div>', unsafe_allow_html=True)
+
 
 
 
