@@ -22,44 +22,37 @@ st.set_page_config(
 # ======================================================================================
 # 3. CUSTOM STYLING (Neon + Glassmorphism)
 # ======================================================================================
-# ======================================================================================
-# 3. CUSTOM CSS (Light Professional Theme)
-# ======================================================================================
 st.markdown("""
 <style>
-    /* Global page background and font */
     .stApp {
         background-color: #f8f9fa;
         color: #212529;
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Headings */
     .header-text {
         text-align: center;
         font-weight: 700;
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         color: #2c3e50;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.2rem;
     }
 
     .subheader-text {
         text-align: center;
         color: #495057;
         font-size: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
-    /* Input form container */
     .form-container {
         background: #ffffff;
         padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+        border-radius: 0.8rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         border: 1px solid #dee2e6;
     }
 
-    /* Input boxes */
     input, select, textarea {
         background-color: #ffffff !important;
         color: #212529 !important;
@@ -67,7 +60,6 @@ st.markdown("""
         border-radius: 0.4rem !important;
     }
 
-    /* Button style */
     .stButton>button {
         background-color: #0d6efd;
         color: white;
@@ -82,35 +74,11 @@ st.markdown("""
         background-color: #0b5ed7;
     }
 
-    /* Metrics */
-    .stMetric > label {
-        color: #495057;
-        font-weight: 600;
-    }
-    .stMetric > div > span {
-        color: #0d6efd;
-        font-size: 2rem;
-        font-weight: 700;
-    }
-
-    /* Expander & footer */
-    .stExpander {
-        background: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 0.5rem;
-    }
-
     .footer {
         text-align: center;
-        padding: 1.5rem;
+        padding: 1rem;
         color: #6c757d;
         font-size: 0.9rem;
-    }
-
-    .footer a {
-        color: #0d6efd;
-        text-decoration: none;
-        font-weight: 500;
     }
 </style>
 """, unsafe_allow_html=True)
