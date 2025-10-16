@@ -96,7 +96,7 @@ scaler = model_data["scaler"]
 # ======================================================================================
 # 5. UI HEADER
 # ======================================================================================
-st.markdown('<p class="header-text">💼 Salary Prediction System</p>', unsafe_allow_html=True)
+st.markdown('<p class="header-text"><h> Salary Prediction System<h></p>', unsafe_allow_html=True)
 st.markdown('<p class="subheader-text">Predict an employee\'s annual salary using machine learning</p>', unsafe_allow_html=True)
 
 # ======================================================================================
@@ -135,7 +135,7 @@ if submitted:
     input_scaled = scaler.transform(input_df)
     predicted_salary = model.predict(input_scaled)[0]
 
-    st.success(f"✅ **Predicted Annual Salary:** ₹{predicted_salary*12:,.0f}")
+    st.success(f"✅ **Predicted Annual Salary:** ₹{predicted_salary*13:,.0f}")
 
     st.markdown("---")
     st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
