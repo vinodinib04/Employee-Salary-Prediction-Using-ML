@@ -221,7 +221,5 @@ with st.expander(" model's performance..."):
     st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
     st.info("This plot shows the relationship between the model's predicted salaries and the actual salaries from the test dataset. A strong positive correlation indicates high accuracy.")
 
-st.markdown("---")
-st.markdown("""
 
 
