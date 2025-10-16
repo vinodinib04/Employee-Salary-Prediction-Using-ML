@@ -1,6 +1,5 @@
 # ======================================================================================
 # 1. IMPORTS
-# All necessary libraries are imported at the top.
 # ======================================================================================
 import streamlit as st
 import pandas as pd
@@ -12,116 +11,117 @@ from streamlit_lottie import st_lottie
 
 # ======================================================================================
 # 2. PAGE CONFIGURATION
-# Sets the browser tab title, icon, and layout.
 # ======================================================================================
 st.set_page_config(
-    page_title="Salary AI - Showcase Version",
-    page_icon="🔮",
+    page_title="Salary Prediction",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
 
 # ======================================================================================
-# 3. CUSTOM CSS
-# This block injects custom CSS for advanced styling.
+# 3. CUSTOM STYLING (Neon + Glassmorphism)
 # ======================================================================================
 st.markdown("""
 <style>
-    /* Main app background */
+    /* Background & base color theme */
     .stApp {
-        background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
-        background-color: #0c111c;
-        color: #e0e7ff !important;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #e0e7ff;
+        font-family: 'Poppins', sans-serif;
     }
 
-    /* General text and label colors */
-    html, body, [class*="st-"], label, span, div, p {
-        color: #e0e7ff !important;
+    /* Glassmorphism card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        padding: 2rem;
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
     }
 
-    /* Input boxes (number_input, selectbox, etc.) */
+    /* Headings */
+    .header-text {
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        background: linear-gradient(90deg, #818cf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .subheader-text {
+        text-align: center;
+        color: #c7d2fe;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Input fields */
     input, select, textarea {
-        background-color: rgba(255, 255, 255, 0.1) !important;
+        background-color: rgba(255,255,255,0.1) !important;
         color: #e0e7ff !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
         border-radius: 0.5rem !important;
     }
 
-    /* Dropdown text visibility */
-    .stSelectbox div, .stTextInput div, .stNumberInput div {
-        color: #e0e7ff !important;
-    }
-
-    /* Button styling */
+    /* Button */
     .stButton>button {
-        background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-image: linear-gradient(135deg, #6366f1, #8b5cf6);
         color: white;
-        padding: 0.8rem 1.6rem;
-        border-radius: 0.75rem;
-        font-weight: bold;
-        font-size: 1.1rem;
         border: none;
+        font-weight: 600;
+        border-radius: 0.6rem;
+        padding: 0.7rem 1.2rem;
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #818cf8;
     }
 
-    /* Metric text */
-    .stMetric > label { font-weight: 600; color: #c7d2fe; }
-    .stMetric > div > span { font-size: 2.5rem; color: #818cf8; font-weight: 700; }
+    /* Metrics */
+    .stMetric > label { color: #a5b4fc; }
+    .stMetric > div > span { color: #c084fc; font-size: 2rem; font-weight: 700; }
 
-    /* Headers */
-    .header-text { font-family: 'Garamond', serif; color: #e0e7ff; font-weight: 700; font-size: 3rem; text-align: center; }
-    .subheader-text { color: #a5b4fc; font-size: 1.1rem; text-align: center; margin-bottom: 2.5rem; }
-
-    /* Containers */
-    .form-container { 
+    /* Expander */
+    .stExpander {
         background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        padding: 2rem;
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Expander & footer */
-    .stExpander { background: rgba(255, 255, 255, 0.05); border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.1); }
-    .footer { text-align: center; padding: 2rem; color: #9ca3af; }
-    .footer a { color: #818cf8; text-decoration: none; font-weight: 600; margin: 0 0.5rem; }
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 
 # ======================================================================================
-# 4. ASSET LOADING
-# This function loads all assets and is cached for performance.
-# This is the most critical part for preventing errors.
+# 4. LOAD ASSETS
 # ======================================================================================
 @st.cache_data
 def load_all_assets():
-    """Loads all necessary assets from local files."""
-    # Load the trained model and associated objects
     model_data = joblib.load("salary_predictor.pkl")
-    
-    # Load the evaluation plot image
     eval_plot = Image.open("images/plot.png")
-    
-    # Load the Lottie animation from a local JSON file
     with open("animation.json", "r") as f:
         lottie_json = json.load(f)
-        
     return model_data, eval_plot, lottie_json
 
-# Call the function RIGHT AWAY to load everything into variables.
-# This solves the NameError because these variables will exist before the UI is built.
 model_data, eval_plot, lottie_json = load_all_assets()
-
-# Unpack the model data dictionary into individual variables for easy access
 model = model_data["model"]
 label_encoders = model_data["label_encoders"]
 scaler = model_data["scaler"]
 
 
 # ======================================================================================
-# 5. SESSION STATE INITIALIZATION
-# Used to store information across reruns, like whether a prediction has been made.
+# 5. SESSION STATE
 # ======================================================================================
 if 'prediction_made' not in st.session_state:
     st.session_state.prediction_made = False
@@ -129,97 +129,77 @@ if 'prediction_made' not in st.session_state:
 
 
 # ======================================================================================
-# 6. UI LAYOUT
+# 6. HEADER
 # ======================================================================================
-# Main header
 st.markdown('<p class="header-text">🔮 AI Salary Oracle</p>', unsafe_allow_html=True)
-st.markdown('<p class="subheader-text">Unveil salary predictions with machine learning. Enter the details to begin.</p>', unsafe_allow_html=True)
+st.markdown('<p class="subheader-text">Predict employee salaries using Machine Learning magic ✨</p>', unsafe_allow_html=True)
+st.divider()
 
-# Main layout with two columns
+
+# ======================================================================================
+# 7. MAIN LAYOUT
+# ======================================================================================
 col1, col2 = st.columns([1.2, 1], gap="large")
 
-# --- COLUMN 1: INPUT FORM ---
 with col1:
     with st.form("salary_form"):
-        # Use a markdown div for the styled container
-        st.markdown('<div class="form-container">', unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; color: #c7d2fe;'>Employee Profile</h3>", unsafe_allow_html=True)
-        
-        # Nested columns for a compact form layout
-        form_col1, form_col2 = st.columns(2)
-        with form_col1:
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align:center;color:#c7d2fe;'>Employee Profile</h3>", unsafe_allow_html=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
             age = st.number_input("Age", min_value=18, max_value=80, value=30)
             education_level = st.selectbox("Education Level", options=label_encoders["Education Level"].classes_, index=2)
-        with form_col2:
+        with c2:
             years_of_experience = st.number_input("Years of Experience", min_value=0, max_value=40, value=5)
             gender = st.selectbox("Gender", options=label_encoders["Gender"].classes_)
         
         job_title = st.selectbox("Job Title", options=label_encoders["Job Title"].classes_, index=5)
-        
-        # The submit button for the form
-        submit_button = st.form_submit_button("Predict the Salary")
-        
+        submit_button = st.form_submit_button("✨ Predict Salary")
         st.markdown('</div>', unsafe_allow_html=True)
 
-# --- COLUMN 2: OUTPUT AREA (DYNAMIC) ---
 with col2:
-    # If no prediction has been made yet, show the animation
-    if  st.session_state.prediction_made:
-        
-    # If a prediction has been made, show the result
-    
-        st.markdown('<div class="form-container">', unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; color: #c7d2fe;'>Oracle's Vision</h3>", unsafe_allow_html=True)
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    if not st.session_state.prediction_made:
+        st_lottie(lottie_json, height=280, key="ai_oracle")
+        st.info("Fill in the details and click Predict to unveil your salary range 👇")
+    else:
         salary = st.session_state.predicted_salary
-        
-        st.metric(
-            label="Estimated Annual Salary Range", 
-            value=f"${salary * 0.925:,.0f} - ₹{salary * 1.075:,.0f}",
-            delta="Based on your inputs",
-            delta_color="off"
-        )
-        st.success("Prediction successful.", icon="✅")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.metric("Estimated Annual Salary Range", f"${salary * 0.925:,.0f} - ₹{salary * 1.075:,.0f}", "Based on your profile")
+        st.success("Prediction successful 🎯")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ======================================================================================
-# 7. PREDICTION LOGIC
-# This block runs only when the form's submit button is clicked.
+# 8. PREDICTION LOGIC
 # ======================================================================================
 if submit_button:
-    # Prepare the input data from the form for the model
     input_data = {
-        "Age": age, "Gender": gender, "Education Level": education_level,
-        "Job Title": job_title, "Years of Experience": years_of_experience
+        "Age": age,
+        "Gender": gender,
+        "Education Level": education_level,
+        "Job Title": job_title,
+        "Years of Experience": years_of_experience
     }
     input_df = pd.DataFrame([input_data])
-    
-    # Transform categorical data using the loaded label encoders
     for col in ["Gender", "Education Level", "Job Title"]:
         input_df[col] = label_encoders[col].transform(input_df[col])
-
-    # Scale the numerical data using the loaded scaler
     input_scaled = scaler.transform(input_df)
-    
-    # Make the prediction
     predicted_salary = model.predict(input_scaled)[0]
-    
-    # Store the result in session state and set the flag
     st.session_state.predicted_salary = predicted_salary
     st.session_state.prediction_made = True
-    
-    # Fun animation and a page rerun to update the UI
-
     st.rerun()
 
 
 # ======================================================================================
-# 8. FOOTER AND ADDITIONAL INFORMATION
+# 9. FOOTER
 # ======================================================================================
 st.markdown("---")
-with st.expander(" model's performance..."):
+with st.expander("View Model Performance 📊"):
     st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
-    st.info("This plot shows the relationship between the model's predicted salaries and the actual salaries from the test dataset. A strong positive correlation indicates high accuracy.")
+    st.info("This plot compares predicted vs actual salaries — the closer to the diagonal line, the better the accuracy.")
+
+
 
 
 
