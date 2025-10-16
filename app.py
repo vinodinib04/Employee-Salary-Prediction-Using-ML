@@ -164,10 +164,10 @@ with col1:
 # --- COLUMN 2: OUTPUT AREA (DYNAMIC) ---
 with col2:
     # If no prediction has been made yet, show the animation
-    if not st.session_state.prediction_made:
+    if  st.session_state.prediction_made:
         
     # If a prediction has been made, show the result
-    else:
+    
         st.markdown('<div class="form-container">', unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; color: #c7d2fe;'>Oracle's Vision</h3>", unsafe_allow_html=True)
         salary = st.session_state.predicted_salary
