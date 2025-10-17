@@ -17,13 +17,19 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     try:
-        model = joblib.load("salary_predictor.pkl")  # <-- updated model name here
-        return model
+        model_dict = joblib.load("salary_predictor.pkl")  # Load the pickle file
+        return model_dict
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
 
-model = load_model()
+model_dict = load_model()
+
+# Extract the actual model from the dictionary
+if model_dict is not None:
+    model = model_dict.get("model", None)
+else:
+    model = None
 
 # -------------------------------
 # App Title & Description
