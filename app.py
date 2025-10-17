@@ -17,7 +17,7 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     try:
-        model = joblib.load("xgboost_smote.pkl")
+        model = joblib.load("salarypredict.pkl")  # <-- updated model name here
         return model
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -70,7 +70,7 @@ if st.button("🔍 Predict Salary"):
         except Exception as e:
             st.error(f"Prediction failed: {e}")
     else:
-        st.error("Model not found. Please make sure 'xgboost_smote.pkl' is in the project folder.")
+        st.error("Model not found. Please make sure 'salarypredict.pkl' is in the project folder.")
 
 # -------------------------------
 # Footer
