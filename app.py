@@ -1,103 +1,79 @@
-# ======================================================================================
-# 6. MAIN TABS
-# ======================================================================================
-tab1, tab2, tab3 = st.tabs(["📋 Salary Prediction", "📊 Insights", "ℹ️ About Project"])
+import streamlit as st
+import pandas as pd
+import joblib
 
-# ======================================================================================
-# TAB 1: Salary Prediction Form
-# ======================================================================================
-with tab1:
-    st.markdown('<div class="form-container">', unsafe_allow_html=True)
-    with st.form("salary_form"):
-        st.subheader("Employee Details")
+# -------------------------------
+# Page Configuration
+# -------------------------------
+st.set_page_config(
+    page_title="Employee Salary Prediction",
+    page_icon="💼",
+    layout="centered"
+)
 
-        col1, col2 = st.columns(2)
-        with col1:
-            age = st.number_input("Age", min_value=18, max_value=80, value=30)
-            gender = st.selectbox("Gender", options=label_encoders["Gender"].classes_)
-            years_of_experience = st.number_input("Years of Experience", min_value=0, max_value=40, value=5)
-        with col2:
-            education_level = st.selectbox("Education Level", options=label_encoders["Education Level"].classes_)
-            job_title = st.selectbox("Job Title", options=label_encoders["Job Title"].classes_)
+# -------------------------------
+# Load Model
+# -------------------------------
+@st.cache_resource
+def load_model():
+    try:
+        model = joblib.load("xgboost_smote.pkl")
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
 
-        submitted = st.form_submit_button("Predict Salary")
+model = load_model()
 
-    st.markdown('</div>', unsafe_allow_html=True)
+# -------------------------------
+# App Title & Description
+# -------------------------------
+st.title("💼 Employee Salary Prediction")
+st.markdown("""
+Welcome to the **Employee Salary Prediction App**!  
+This tool predicts an employee's salary based on their experience, age, education, and department.
 
-    # --- Prediction Result Section ---
-    if submitted:
-        input_data = {
-            "Age": age,
-            "Gender": gender,
-            "Education Level": education_level,
-            "Job Title": job_title,
-            "Years of Experience": years_of_experience
-        }
-        input_df = pd.DataFrame([input_data])
+Please fill in the details below and click **Predict Salary** to see the estimated amount.
+""")
 
-        for col in ["Gender", "Education Level", "Job Title"]:
-            input_df[col] = label_encoders[col].transform(input_df[col])
+# -------------------------------
+# Input Section
+# -------------------------------
+st.subheader("Enter Employee Details")
 
-        input_scaled = scaler.transform(input_df)
-        predicted_salary = model.predict(input_scaled)[0]
+col1, col2 = st.columns(2)
 
-        st.success(f"💰 **Predicted Annual Salary:** ₹{predicted_salary * 13:,.0f}")
+with col1:
+    experience = st.number_input("Experience (in years)", min_value=0, max_value=50, value=3)
+    education = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "PhD"])
 
-        st.metric(label="Predicted Monthly Salary", value=f"₹{predicted_salary:,.0f}")
-        st.metric(label="Experience Level", value="Senior" if years_of_experience > 10 else "Mid-Level" if years_of_experience > 3 else "Entry-Level")
-        st.progress(min(years_of_experience / 40, 1.0))
+with col2:
+    age = st.number_input("Age", min_value=18, max_value=70, value=25)
+    department = st.selectbox("Department", ["Sales", "Engineering", "HR", "Marketing", "Finance"])
 
-        st.markdown("---")
-        st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
+# -------------------------------
+# Prediction
+# -------------------------------
+st.markdown("---")
+if st.button("🔍 Predict Salary"):
+    if model is not None:
+        input_data = pd.DataFrame({
+            "experience": [experience],
+            "age": [age],
+            "education": [education],
+            "department": [department]
+        })
 
-# ======================================================================================
-# TAB 2: Insights
-# ======================================================================================
-with tab2:
-    st.subheader("📈 Sample Data Insights")
-    st.info("Visual insights about features affecting salary")
+        try:
+            prediction = model.predict(input_data)
+            st.success(f"💰 **Predicted Salary:** ₹ {prediction[0]:,.2f}")
+        except Exception as e:
+            st.error(f"Prediction failed: {e}")
+    else:
+        st.error("Model not found. Please make sure 'xgboost_smote.pkl' is in the project folder.")
 
-    # Example mini data visualization (fake but for demo purpose)
-    data = {
-        "Education Level": ["High School", "Bachelor’s", "Master’s", "PhD"],
-        "Avg Salary (₹)": [350000, 700000, 1200000, 1800000]
-    }
-    df = pd.DataFrame(data)
-    st.bar_chart(df.set_index("Education Level"))
-
-    exp_df = pd.DataFrame({
-        "Years of Experience": [0, 5, 10, 15, 20, 25],
-        "Estimated Salary (₹)": [200000, 500000, 900000, 1200000, 1500000, 1800000]
-    })
-    st.line_chart(exp_df.set_index("Years of Experience"))
-
-# ======================================================================================
-# TAB 3: About Project
-# ======================================================================================
-with tab3:
-    st.subheader("ℹ️ Project Summary")
-    st.write("""
-    **Project Title:** Salary Prediction System using Machine Learning  
- 
-    **Objective:**  
-    To predict an employee's salary based on demographic and professional attributes such as age, gender, education, and experience.
-
-    **Features of this App:**
-    - User-friendly interface with clean design  
-    - Machine learning model integrated using `joblib`  
-    - Dynamic visualizations and metrics  
-    - Cached loading for performance  
-    - Insight dashboard for data exploration  
-
-    **Tools Used:** Streamlit, Pandas, Scikit-learn, Joblib  
-    **Dataset Source:** Internal salary dataset (pre-trained model)
-    """)
-
-
-
-
-
-
-
-
-
+# -------------------------------
+# Footer
+# -------------------------------
+st.markdown("---")
+st.caption("Developed by **Vinodini Bandaru** | Powered by Machine Learning 🚀")
