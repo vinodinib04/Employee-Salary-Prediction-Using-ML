@@ -20,7 +20,7 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     try:
-        model_data = joblib.load("salarypredict.pkl")  # model pickle contains model, label_encoders, scaler
+        model_data = joblib.load("salary_predictor.pkl")  # model pickle contains model, label_encoders, scaler
         return model_data
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -99,4 +99,3 @@ if st.button("🔍 Predict Salary"):
 # 7. FOOTER
 # ======================================================================================
 st.markdown("---")
-st.caption("Developed by **Vinodini Bandaru** | Powered by Machine Learning 🚀")
