@@ -1,144 +1,98 @@
 # ======================================================================================
-# 1. IMPORTS
+# 6. MAIN TABS
 # ======================================================================================
-import streamlit as st
-import pandas as pd
-import joblib
-from PIL import Image
+tab1, tab2, tab3 = st.tabs(["📋 Salary Prediction", "📊 Insights", "ℹ️ About Project"])
 
 # ======================================================================================
-# 2. PAGE CONFIGURATION
+# TAB 1: Salary Prediction Form
 # ======================================================================================
-st.set_page_config(
-    page_title="Salary Prediction System",
-    page_icon="💼",
-    layout="centered"
-)
+with tab1:
+    st.markdown('<div class="form-container">', unsafe_allow_html=True)
+    with st.form("salary_form"):
+        st.subheader("Employee Details")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            age = st.number_input("Age", min_value=18, max_value=80, value=30)
+            gender = st.selectbox("Gender", options=label_encoders["Gender"].classes_)
+            years_of_experience = st.number_input("Years of Experience", min_value=0, max_value=40, value=5)
+        with col2:
+            education_level = st.selectbox("Education Level", options=label_encoders["Education Level"].classes_)
+            job_title = st.selectbox("Job Title", options=label_encoders["Job Title"].classes_)
+
+        submitted = st.form_submit_button("Predict Salary")
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # --- Prediction Result Section ---
+    if submitted:
+        input_data = {
+            "Age": age,
+            "Gender": gender,
+            "Education Level": education_level,
+            "Job Title": job_title,
+            "Years of Experience": years_of_experience
+        }
+        input_df = pd.DataFrame([input_data])
+
+        for col in ["Gender", "Education Level", "Job Title"]:
+            input_df[col] = label_encoders[col].transform(input_df[col])
+
+        input_scaled = scaler.transform(input_df)
+        predicted_salary = model.predict(input_scaled)[0]
+
+        st.success(f"💰 **Predicted Annual Salary:** ₹{predicted_salary * 13:,.0f}")
+
+        st.metric(label="Predicted Monthly Salary", value=f"₹{predicted_salary:,.0f}")
+        st.metric(label="Experience Level", value="Senior" if years_of_experience > 10 else "Mid-Level" if years_of_experience > 3 else "Entry-Level")
+        st.progress(min(years_of_experience / 40, 1.0))
+
+        st.markdown("---")
+        st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
 
 # ======================================================================================
-# 3. CUSTOM CSS (Light, Formal Theme)
+# TAB 2: Insights
 # ======================================================================================
-st.markdown("""
-<style>
-    .stApp {
-        background-color: #f8f9fa;
-        color: #212529;
-        font-family: 'Segoe UI', sans-serif;
+with tab2:
+    st.subheader("📈 Sample Data Insights")
+    st.info("Visual insights about features affecting salary")
+
+    # Example mini data visualization (fake but for demo purpose)
+    data = {
+        "Education Level": ["High School", "Bachelor’s", "Master’s", "PhD"],
+        "Avg Salary (₹)": [350000, 700000, 1200000, 1800000]
     }
+    df = pd.DataFrame(data)
+    st.bar_chart(df.set_index("Education Level"))
 
-    .header-text {
-        text-align: center;
-        font-weight: 700;
-        font-size: 2.2rem;
-        color: #2c3e50;
-        margin-bottom: 0.2rem;
-    }
-
-    .subheader-text {
-        text-align: center;
-        color: #495057;
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .form-container {
-        background: #ffffff;
-        padding: 2rem;
-        border-radius: 0.8rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        border: 1px solid #dee2e6;
-    }
-
-    input, select, textarea {
-        background-color: #ffffff !important;
-        color: #212529 !important;
-        border: 1px solid #ced4da !important;
-        border-radius: 0.4rem !important;
-    }
-
-    .stButton>button {
-        background-color: #0d6efd;
-        color: white;
-        border: none;
-        border-radius: 0.4rem;
-        padding: 0.6rem 1.4rem;
-        font-size: 1rem;
-        font-weight: 600;
-        transition: background 0.2s ease;
-    }
-    .stButton>button:hover {
-        background-color: #0b5ed7;
-    }
-
-    .footer {
-        text-align: center;
-        padding: 1rem;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-</style>
-""", unsafe_allow_html=True)
+    exp_df = pd.DataFrame({
+        "Years of Experience": [0, 5, 10, 15, 20, 25],
+        "Estimated Salary (₹)": [200000, 500000, 900000, 1200000, 1500000, 1800000]
+    })
+    st.line_chart(exp_df.set_index("Years of Experience"))
 
 # ======================================================================================
-# 4. LOAD ASSETS
+# TAB 3: About Project
 # ======================================================================================
-@st.cache_data
-def load_assets():
-    model_data = joblib.load("salary_predictor.pkl")
-    eval_plot = Image.open("images/plot.png")
-    return model_data, eval_plot
+with tab3:
+    st.subheader("ℹ️ Project Summary")
+    st.write("""
+    **Project Title:** Salary Prediction System using Machine Learning  
+ 
+    **Objective:**  
+    To predict an employee's salary based on demographic and professional attributes such as age, gender, education, and experience.
 
-model_data, eval_plot = load_assets()
-model = model_data["model"]
-label_encoders = model_data["label_encoders"]
-scaler = model_data["scaler"]
+    **Features of this App:**
+    - User-friendly interface with clean design  
+    - Machine learning model integrated using `joblib`  
+    - Dynamic visualizations and metrics  
+    - Cached loading for performance  
+    - Insight dashboard for data exploration  
 
-# ======================================================================================
-# 5. UI HEADER
-# ======================================================================================
-st.markdown('<p class="header-text"><h> Salary Prediction System<h></p>', unsafe_allow_html=True)
-st.markdown('<p class="subheader-text">Predict an employee\'s annual salary using machine learning</p>', unsafe_allow_html=True)
+    **Tools Used:** Streamlit, Pandas, Scikit-learn, Joblib  
+    **Dataset Source:** Internal salary dataset (pre-trained model)
+    """)
 
-# ======================================================================================
-# 6. INPUT FORM
-# ======================================================================================
-st.markdown('<div class="form-container">', unsafe_allow_html=True)
-with st.form("salary_form"):
-    st.header("Employee Details")
-
-    age = st.number_input("Age", min_value=18, max_value=80, value=30)
-    gender = st.selectbox("Gender", options=label_encoders["Gender"].classes_)
-    education_level = st.selectbox("Education Level", options=label_encoders["Education Level"].classes_)
-    job_title = st.selectbox("Job Title", options=label_encoders["Job Title"].classes_)
-    years_of_experience = st.number_input("Years of Experience", min_value=0, max_value=40, value=5)
-
-    submitted = st.form_submit_button("Predict Salary")
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# ======================================================================================
-# 7. PREDICTION
-# ======================================================================================
-if submitted:
-    input_data = {
-        "Age": age,
-        "Gender": gender,
-        "Education Level": education_level,
-        "Job Title": job_title,
-        "Years of Experience": years_of_experience
-    }
-    input_df = pd.DataFrame([input_data])
-
-    for col in ["Gender", "Education Level", "Job Title"]:
-        input_df[col] = label_encoders[col].transform(input_df[col])
-
-    input_scaled = scaler.transform(input_df)
-    predicted_salary = model.predict(input_scaled)[0]
-
-    st.success(f"✅ **Predicted Annual Salary:** ₹{predicted_salary*13:,.0f}")
-
-    st.markdown("---")
-    st.image(eval_plot, caption="Model Evaluation: Actual vs. Predicted Salaries", use_container_width=True)
 
 
 
