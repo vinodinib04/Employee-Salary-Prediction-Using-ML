@@ -17,7 +17,7 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     try:
-        model = joblib.load("salarypredict.pkl")  # <-- updated model name here
+        model = joblib.load("salary_predictor.pkl")  # <-- updated model name here
         return model
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -31,7 +31,7 @@ model = load_model()
 st.title("💼 Employee Salary Prediction")
 st.markdown("""
 Welcome to the **Employee Salary Prediction App**!  
-This tool predicts an employee's salary based on their experience, age, education, and department.
+This tool predicts an employee's salary based on their experience, age, education, gender, and department.
 
 Please fill in the details below and click **Predict Salary** to see the estimated amount.
 """)
@@ -46,6 +46,7 @@ col1, col2 = st.columns(2)
 with col1:
     experience = st.number_input("Experience (in years)", min_value=0, max_value=50, value=3)
     education = st.selectbox("Education Level", ["High School", "Bachelor's", "Master's", "PhD"])
+    gender = st.selectbox("Gender", ["Male", "Female", "Other"])
 
 with col2:
     age = st.number_input("Age", min_value=18, max_value=70, value=25)
@@ -61,6 +62,7 @@ if st.button("🔍 Predict Salary"):
             "experience": [experience],
             "age": [age],
             "education": [education],
+            "gender": [gender],
             "department": [department]
         })
 
