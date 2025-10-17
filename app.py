@@ -62,23 +62,37 @@ with col2:
 # Prediction
 # -------------------------------
 if st.button("🔍 Predict Salary"):
-    if model is not None:
-        input_data = pd.DataFrame({
+    if model_dict is not None:
+        # Build input DataFrame with original column names
+        input_df = pd.DataFrame({
             "Age": [age],
             "Gender": [gender],
             "Education Level": [education],
-            "Job Title": [department],  # department is actually Job Title in original model
+            "Job Title": [department],  # Department corresponds to Job Title
             "Years of Experience": [experience]
         })
 
+        # Transform categorical columns using label encoders from the model dict
+        label_encoders = model_dict.get("label_encoders", {})
+        for col in ["Gender", "Education Level", "Job Title"]:
+            if col in label_encoders:
+                input_df[col] = label_encoders[col].transform(input_df[col])
+
+        # Scale numeric features if scaler exists
+        scaler = model_dict.get("scaler", None)
+        if scaler:
+            input_scaled = scaler.transform(input_df)
+        else:
+            input_scaled = input_df.values
+
+        # Make prediction
         try:
-            prediction = model.predict(input_data)
+            prediction = model.predict(input_scaled)
             st.success(f"💰 **Predicted Salary:** ₹ {prediction[0]:,.2f}")
         except Exception as e:
             st.error(f"Prediction failed: {e}")
     else:
         st.error("Model not found. Please make sure 'salarypredict.pkl' is in the project folder.")
-
 
 # -------------------------------
 # Footer
