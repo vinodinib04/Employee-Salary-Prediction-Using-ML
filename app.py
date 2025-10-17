@@ -99,6 +99,7 @@ with tab1:
 # ======================================================================================
 # TAB 2 - INSIGHTS (DYNAMIC)
 # ======================================================================================
+# TAB 2 - INSIGHTS (DYNAMIC)
 with tab2:
     st.subheader("📊 Insights")
     df = st.session_state.predictions_log
