@@ -89,7 +89,7 @@ if st.button("🔍 Predict Salary"):
         # Predict
         try:
             prediction = model.predict(input_scaled)
-            st.success(f"💰 **Predicted Salary:** ₹ {prediction[0]:,.2f}")
+            st.success(f"💰 **Predicted Salary:** ₹ {prediction[0]*13:,.2f}")
         except Exception as e:
             st.error(f"Prediction failed: {e}")
     else:
