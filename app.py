@@ -17,7 +17,7 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     try:
-        model = joblib.load("salarypredict.pkl")  # <-- updated model name here
+        model = joblib.load("salary_predictor.pkl")  # <-- updated model name here
         return model
     except Exception as e:
         st.error(f"Error loading model: {e}")
