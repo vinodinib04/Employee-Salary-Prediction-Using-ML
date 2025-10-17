@@ -11,7 +11,7 @@ st.write("Predict employee salary based on input features using a trained ML mod
 
 # Load model safely
 try:
-    model = joblib.load("salarypredict.pkl")
+    model = joblib.load("salary_predictor.pkl")
 except Exception as e:
     st.error(f"⚠️ Error loading model: {e}")
     st.stop()
