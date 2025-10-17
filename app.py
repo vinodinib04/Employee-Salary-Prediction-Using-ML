@@ -61,15 +61,14 @@ with col2:
 # -------------------------------
 # Prediction
 # -------------------------------
-st.markdown("---")
 if st.button("🔍 Predict Salary"):
     if model is not None:
         input_data = pd.DataFrame({
-            "experience": [experience],
-            "age": [age],
-            "education": [education],
-            "gender": [gender],
-            "department": [department]
+            "Age": [age],
+            "Gender": [gender],
+            "Education Level": [education],
+            "Job Title": [department],  # department is actually Job Title in original model
+            "Years of Experience": [experience]
         })
 
         try:
@@ -79,6 +78,7 @@ if st.button("🔍 Predict Salary"):
             st.error(f"Prediction failed: {e}")
     else:
         st.error("Model not found. Please make sure 'salarypredict.pkl' is in the project folder.")
+
 
 # -------------------------------
 # Footer
